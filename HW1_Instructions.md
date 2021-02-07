@@ -55,20 +55,18 @@ $ git clone git@github.com:<your_username>/<your_repository_name>.git
 
 Be sure to make the repository **private**.
 
-The next step is to set up Travis CI. To do this, go to
-https://travis-ci.org and authorize Travis to link with your GitHub
-account. After this, you should create a .travis.yml file in the root of
-your repository. For information on how to set up a .travis.yml file,
-you can read the Travis tutorial
-(https://docs.travis-ci.com/user/tutorial/) and the guide to using
-Travis with C and C++ (https://docs.travis-ci.com/user/languages/c/).
-Finally, you are required to set up Travis CI. This will take the form
-of creating a .travis.yml file which will contain the settings for
-Travis. More information about the .travis.yaml file for C projects can
-be found at https://docs.travis-ci.com/user/languages/c/. In Part 2 of
-this project you will be expanding the functionality of Travis by
-including tests.
+The next step is to set up Github Actions to automatically build and test
+your code when you push a commit. You can find a [tutorial on GitHub Actions here](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions).
 
+For now, you should set up GitHub Actions to just run
+
+```
+echo "Hello world"
+```
+
+whenever a new commit is pushed to the repository. To do this, you'll create a
+file named `.github/workflows/hello.yml`. Check that the Action is running
+correctly in the GitHub interface.
 
 ## Part 2: Auditing and Test Cases
 
@@ -106,7 +104,7 @@ format and how to produce gift card files.
 Finally, fix the bugs that are triggered by your test cases, and verify
 that the program no longer crashes / hangs on your test cases. To make
 sure that these bugs don't come up again as the code evolves, have
-Travis automatically build and run the program on your test suite.
+Github Actions automatically build and run the program on your test suite.
 
 ## Part 3: Fuzzing and Coverage
 
@@ -143,11 +141,10 @@ found by AFL. You should find that not all of the crashes found by AFL
 originally crash the program now---although AFL tries its best to figure
 out which crashes are caused by unique bugs, if often overcounts.
 
-Add the generated tests to your repository and have Travis run them.
-Note that depending on how long you ran the fuzzer and how fast your
-machine is, there may be a lot of redundant test cases! To keep only the
-ones that exercise new behavior in your program, you can use the
-`afl-tmin` tool.
+Add the generated tests to your repository and have Github Actions run them.
+Note that depending on how long you ran the fuzzer and how fast your machine
+is, there may be a lot of redundant test cases! To keep only the ones that
+exercise new behavior in your program, you can use the `afl-tmin` tool.
 
 To complete the assignment, commit your updated code, your handwritten
 tests, the fuzzer-generated tests, and a brief writeup explaining the
@@ -160,13 +157,13 @@ Total points: 100
 Part 1 is worth 20 points:
 
 * 10 points for signed commits
-* 10 points for Travis configuration
+* 10 points for GitHub Actions configuration
 
 Part 2 is worth 40 points:
 
 * 15 points for your test cases and fixes
 * 15 points for the bug writeup
-* 10 points for Travis regression testing
+* 10 points for GitHub Actions regression testing
 
 Part 3 is worth 40 points:
 
@@ -188,18 +185,18 @@ Your TA is: **Manan-bit**
 The repository should contain:
 
 * Part 1
-  * Your .travis.yml
+  * Your `.github/workflows/hello.yml`
   * At least one signed commit
 * Part 2
   * A directory named `part2` that contains `crash1.gft`, `crash2.gft`,
     `hang.gft`, and `writeup.txt`
-  * An updated .travis.yml that runs your tests
+  * An GitHub Actions YML that runs your tests
   * A commit with the fixed version of the code (if you like, this
     commit can also contain the files mentioned above)
 * Part 3
   * A directory named `part3` that contains `cov1.gft`, `cov2.gft`,
     `fuzzer1.gft`, `fuzzer2.gft`, and `writeup.txt`
-  * An updated .travis.yml that runs the new tests
+  * An updated Actions YML that runs the new tests
   * A commit with the fixed version of the code (if you like, this
     commit can also contain the files mentioned above)
 
