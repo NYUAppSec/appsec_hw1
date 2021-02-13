@@ -144,7 +144,7 @@ out which crashes are caused by unique bugs, if often overcounts.
 Add the generated tests to your repository and have Github Actions run them.
 Note that depending on how long you ran the fuzzer and how fast your machine
 is, there may be a lot of redundant test cases! To keep only the ones that
-exercise new behavior in your program, you can use the `afl-tmin` tool.
+exercise new behavior in your program, you can use the `afl-cmin` tool.
 
 To complete the assignment, commit your updated code, your handwritten
 tests, the fuzzer-generated tests, and a brief writeup explaining the
