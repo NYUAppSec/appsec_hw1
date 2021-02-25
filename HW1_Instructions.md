@@ -189,7 +189,7 @@ The repository should contain:
   * At least one signed commit
 * Part 2
   * A directory named `part2` that contains `crash1.gft`, `crash2.gft`,
-    `hang.gft`, and `writeup.txt`
+    `hang.gft`, and `bugs.txt`
   * An GitHub Actions YML that runs your tests
   * A commit with the fixed version of the code (if you like, this
     commit can also contain the files mentioned above)
