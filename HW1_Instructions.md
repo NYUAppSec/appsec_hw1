@@ -174,13 +174,7 @@ Part 3 is worth 40 points:
 
 ## What to Submit
 
-On NYU Classes, submit a link to your GitHub repository. The repository should
-be **private**, and you should add both the instructor and TA's GitHub account
-as a contributor to give them access for grading.
-
-For this section, your instructor is: **moyix**
-
-Your TA is: **Manan-bit**
+On NYU Classes, submit a link to your GitHub repository.
 
 The repository should contain:
 
