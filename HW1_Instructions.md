@@ -20,7 +20,7 @@ you want to imitate.
 
 In order to complete this assignment, you are required to use the git
 VCS. Before beginning to write your code, you should first install git
-and set up a git repository to store your code in. The git binaries can
+and clone the repository from GitHub classroom. The git binaries can
 be installed by your local package manager or at
 https://git-scm.com/downloads. For a cheat-sheet of git commands, please
 see https://github.com/nyutandononline/CLI-Cheat-Sheet/blob/master/git-commands.md.
@@ -28,32 +28,29 @@ Although we will not be checking your commit messages or git log, it is
 recommended that you write descriptive commit messages so that the
 evolution of your repository is easy to understand. For a guide to
 writing good commit messages, please read
-https://chris.beams.io/posts/git-commit/ and
-https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches#n104
-(lines 104 – 160).
+https://chris.beams.io/posts/git-commit/ and the [Linux kernel's advice
+on writing good commit messages](https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=b23dac905bde28da47543484320db16312c87551#n134).
 
 After git is installed, you will want to configure your git user to sign
 your commits. This can be done by following the guide at
-https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work.
+https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work. You will also
+need to [add your GPG public key to your GitHub profile](https://github.com/settings/keys),
+and make sure that the email address set in your GitHub account matches
+the one you specified when generating your keys. You can find more information
+about about this in [GitHub's documentation on commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification). To avoid having to
+type in your password all the time you, may also want to [set up SSH key
+access to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh).
 
-After installing and configuring git, you should then create a GitHub
-account at https://github.com, and add an ssh key using the guide found
-at https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account.
-
-After creating a GitHub account, you are ready to create a git
-repository for the project you will be working on. The recommended way
-to do this is to create a repository using the GitHub Web interface.
-This is recommended because it can automatically generate important
-files for you, such as the license for your project and the gitignore
-file to avoid unintentionally tracking unnecessary files. After you
-create the repository on GitHub, you can clone it to your local machine
-using the following command.
+After accepting the invitation on GitHub Classroom, you can clone the
+assignment repository by clicking the green "Code" button, copying the
+repository URL under "Clone", and then running:
 
 ```
-$ git clone git@github.com:<your_username>/<your_repository_name>.git
+git clone <your_repository_url>
 ```
 
-Be sure to make the repository **private**.
+Note that if you have set up an SSH key, you will want to make sure you
+copy the SSH URL (which looks like `git@github.com:NYUAppSec/...`).
 
 The next step is to set up Github Actions to automatically build and test
 your code when you push a commit. You can find a [tutorial on GitHub Actions here](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions).
@@ -68,14 +65,17 @@ whenever a new commit is pushed to the repository. To do this, you'll create a
 file named `.github/workflows/hello.yml`. Check that the Action is running
 correctly in the GitHub interface.
 
+**Important Note:** Because GitHub Actions has a classroom-wide limit on the
+number of minutes, we have set up our own GitHub Actions runner that is not
+subject to those limits. To use it, just change the `runs-on` line in your
+actions YML file to:
+
+
+```
+runs-on: self-hosted
+```
+
 ## Part 2: Auditing and Test Cases
-
-Start off by copying the files from this repository into your own, and
-add them to git. The files you need are:
-
-```
-examplefile.gft giftcardexamplewriter.c giftcard.h giftcardreader.c Makefile
-```
 
 Read through the `giftcardreader.c` program (and its accompanying
 header, `giftcard.h`) to get a feel for it. You should also try building
@@ -91,20 +91,25 @@ the program. You should write:
 1. *Two* test cases, `crash1.gft` and `crash2.gft`, that cause the
    program to crash; each crash should have a different root cause.
 2. One test case, `hang.gft`, that causes the program to loop
-   infinitely. (Hint: you may want to examine the "program" record type
+   infinitely. (Hint: you may want to examine the "animation" record type
    to find a bug that causes the program to loop infinitely.)
 3. A text file, `bugs.txt` explaining the bug triggered by each of your
    three test cases. 
 
-To create your own test files, you may want to look at
-`giftcardexamplewriter.c`. Although it is no better written than
-`giftcardreader.c`, it should help you understand the basics of the file
-format and how to produce gift card files.
+To create your own test files, you may want to refer to the `gengift.py`
+and `genanim.py` programs, which are Python scripts that create gift
+card files of different types.
 
 Finally, fix the bugs that are triggered by your test cases, and verify
 that the program no longer crashes / hangs on your test cases. To make
 sure that these bugs don't come up again as the code evolves, have
 Github Actions automatically build and run the program on your test suite.
+There are a few ways to do this, but the simplest is to modify the Makefile's
+existing `test` target to run the giftcardreader on your gift card files
+and then have GitHub Actions run `make test`. Note that you do *not* need
+to run your tests on the unfixed version of the code---the tests are intended
+to verify that the code is fixed and prevent the bugs from being reintroduced
+in later versions.
 
 ## Part 3: Fuzzing and Coverage
 
@@ -122,29 +127,22 @@ suite). Pick two lines of code from the program that are currently
 not covered and create test cases that cover them.
 
 An easy and effective way of finding crashes and getting higher coverage
-in a program is to *fuzz* it with a fuzzer like AFL. Fuzz the program
-using AFL, following the [quick-start
-instructions](https://lcamtuf.coredump.cx/afl/QuickStartGuide.txt). To
+in a program is to *fuzz* it with a fuzzer like AFL++. Fuzz the program
+using AFL++, following the [quick-start
+instructions](https://github.com/AFLplusplus/AFLplusplus#quick-start-fuzzing-with-afl). To
 make the fuzzing more effective, you should provide AFL
 with all of the test files you have created in its input directory. Let
 the fuzzer run for at least two hours, and then examine the test cases
 (in the `queue` directory) and crashes/hangs (in the `crashes` and
 `hangs` directories).
 
-Add the generated test cases (but not the crashes or hangs) to your test
+Add the non-crashing test cases to your test
 suite, and produce a new coverage report. You should see that the tests
 generated by the fuzzer reach more parts of the gift card program.
 
 Finally, pick two crashes/hangs and fix the bugs in the program that
-cause them. Then, re-run the program on *all* the crashes and hangs
-found by AFL. You should find that not all of the crashes found by AFL
-originally crash the program now---although AFL tries its best to figure
-out which crashes are caused by unique bugs, if often overcounts.
-
-Add the generated tests to your repository and have Github Actions run them.
-Note that depending on how long you ran the fuzzer and how fast your machine
-is, there may be a lot of redundant test cases! To keep only the ones that
-exercise new behavior in your program, you can use the `afl-cmin` tool.
+cause them. You should include these test cases in the tests you run
+in GitHub Actions.
 
 To complete the assignment, commit your updated code, your handwritten
 tests, the fuzzer-generated tests, and a brief writeup explaining the
@@ -174,7 +172,7 @@ Part 3 is worth 40 points:
 
 ## What to Submit
 
-On NYU Classes, submit a link to your GitHub repository.
+On Brightspace, **submit a link to your GitHub repository**. This is necessary so that we can tell which GitHub username corresponds to which NYU account.
 
 The repository should contain:
 
@@ -205,8 +203,8 @@ finding bugs doesn't mean that the program is bug-free!
 Realistically, this program is probably unsalvageable in its current
 state. It would be better in this case to rewrite it from scratch,
 either in C using a very defensive programming style, or in a safer
-language like Python or Rust. Once this assignment is complete, we will
-release a cleanly-written version of the program (written in C) that
+language like Python or Rust. In the "clean" directory, you can find
+a cleanly-written version of the program (written in C) that
 should be relatively bug-free [1]. You'll notice that it's a lot more
 verbose, and checks for many more errors than the buggy
 version---writing safe C code is difficult!

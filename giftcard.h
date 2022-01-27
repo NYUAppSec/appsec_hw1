@@ -62,6 +62,7 @@
 
 // BDG note: this program structure looks complex. And I'm worried
 //           about that comment that says programs must be "VALID"??
+
 #include<stdlib.h>
 
 struct this_gift_card {
@@ -84,13 +85,14 @@ struct gift_card_record_data {
 };
 
 
-
 struct gift_card_amount_change {
 	int amount_added;
 	// always 32 bytes.  Only appears if amount_added is positive
 	char *actual_signature; 
 };
 
+// BDG: I'm not sure these sizes are right... might want to double-check
+// what the actual program does.
 struct gift_card_program {
     char *message; // 32 bytes
     unsigned char *program; // 128 bytes
