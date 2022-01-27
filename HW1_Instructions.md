@@ -148,6 +148,24 @@ To complete the assignment, commit your updated code, your handwritten
 tests, the fuzzer-generated tests, and a brief writeup explaining the
 bugs you found and fixed in this part.
 
+## Hints
+
+1. What counts as two different bugs? A general rule of thumb is that
+   if you can fix one of them without fixing the other, then they will
+   be counted as distinct bugs.
+3. Some crashes may not occur consistently every time you run the program,
+   or may not occur when you run the program in a different environment or
+   with different compile flags. One way to make a crash more reproducible
+   is to use Address Sanitizer (ASAN), which we will cover in class. The
+   `Makefile` also includes a target that will build the gift card reader
+   using ASAN, which you can invoke with `make asan`.
+2. When fixing a crash, you should try to understand what the root cause is.
+   You will probably find it helpful to look at the address sanitizer output,
+   which will usually tell you exactly what line of the program is accessing
+   invalid memory. You may also want to try using the `gdb` or `lldb` debuggers;
+   guides and tutorials can be found online. Your IDE (if you use one) may also
+   provide a built-in debugger. 
+
 ## Grading
 
 Total points: 100
