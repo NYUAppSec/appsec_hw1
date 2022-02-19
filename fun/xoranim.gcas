@@ -1,0 +1,46 @@
+; Looping animation that XORs each byte with 0x20
+
+START:
+    ; Keep XOR byte in r1
+    mov 0x20, r1
+
+    ; Direction is stored in r2: zero for forward, 1 for backward
+    mov 0, r2
+
+    ; Scratch, keep zero in there
+    mov 0, r4
+
+LOOP_TOP:
+    getch r0
+    add r0, r4 ; sets the zero flag
+
+    ; If we hit a NULL, reverse direction
+    jz REVERSE
+
+    ; Swap case
+    xor r0, r1
+
+    ; If it was a space (0x20) then result is 0
+    ; We don't want to modify spaces so skip
+    jz SKIP
+    ; Otherwise write it back to the message and display
+    putch r0
+    disp
+SKIP:
+    add r2, r4 ; test if zero
+    jz MOVE_FORWARD
+MOVE_BACKWARD:
+    movcurs -1
+    jmp LOOP_TOP
+MOVE_FORWARD:
+    movcurs 1
+    jmp LOOP_TOP
+
+REVERSE:
+    ; XOR with 1 to flip direction
+    mov 1, r3
+    xor r2, r3
+    ; Still need to move the cursor off the null byte so
+    ; bounce back to LOOP_TOP via SKIP
+    jmp SKIP
+

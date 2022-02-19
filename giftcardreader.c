@@ -10,7 +10,7 @@
 #include "giftcard.h"
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 // .,~==== interpreter for THX-1138 assembly ====~,.
 //
