@@ -65,24 +65,37 @@ whenever a new commit is pushed to the repository. To do this, you'll create a
 file named `.github/workflows/hello.yml`. Check that the Action is running
 correctly in the GitHub interface.
 
-**Important Note:** Because GitHub Actions has a classroom-wide limit on the
-number of minutes, we have set up our own GitHub Actions runner that is not
-subject to those limits. To use it, just change the `runs-on` line in your
-actions YML file to:
-
-
-```
-runs-on: self-hosted
-```
-
 ## Part 2: Auditing and Test Cases
 
 Read through the `giftcardreader.c` program (and its accompanying
 header, `giftcard.h`) to get a feel for it. You should also try building
 and running it with the included `examplefile.gft` file, to see what its
 normal output is. You may find it helpful to use a debugger like `gdb`
-to step through the program as it executes, to get an understanding of
+or `lldb` to step through the program as it executes, to get an understanding of
 its normal flow of control.
+
+There is also a `Makefile` included in the repository. You can use this
+to build the program by typing `make`. You can also use it to run the
+(very minimal and incomplete) test suite for the program by typing
+`make test`, which uses `runtests.sh` to run the gift card reader on the
+gift cards found in `testcases/valid` and `testcases/invalid`:
+
+```
+$ make test
+$ ./runtests.sh
+Running tests on valid gift cards (expected return value: 0)...
+Testcase                                           Pass? Exit Status
+examplefile.gft                                    PASS  0
+
+Running tests on invalid gift cards (expected return value: nonzero)...
+Testcase                                           Pass? Exit Status
+badtype.gft                                        PASS  1
+
+TESTING SUMMARY:
+Passed: 2
+Failed: 0
+Total:  2
+```
 
 For this part, your job will be to find some flaws in the program, and
 then create test cases (i.e., binary gift cards) that expose flaws in
@@ -93,8 +106,8 @@ the program. You should write:
 2. One test case, `hang.gft`, that causes the program to loop
    infinitely. (Hint: you may want to examine the "animation" record type
    to find a bug that causes the program to loop infinitely.)
-3. A text file, `bugs.txt` explaining the bug triggered by each of your
-   three test cases. 
+3. A text file, `part2.txt` explaining the bug triggered by each of your
+   three test cases.
 
 To create your own test files, you may want to refer to the `gengift.py`
 and `genanim.py` programs, which are Python scripts that create gift
@@ -104,12 +117,13 @@ Finally, fix the bugs that are triggered by your test cases, and verify
 that the program no longer crashes / hangs on your test cases. To make
 sure that these bugs don't come up again as the code evolves, have
 Github Actions automatically build and run the program on your test suite.
-There are a few ways to do this, but the simplest is to modify the Makefile's
-existing `test` target to run the giftcardreader on your gift card files
-and then have GitHub Actions run `make test`. Note that you do *not* need
-to run your tests on the unfixed version of the code---the tests are intended
-to verify that the code is fixed and prevent the bugs from being reintroduced
-in later versions.
+You can do this by placing the new test cases in the `testcases/valid` or
+`testcases/invalid` directories (depending on whether the gift card reader
+should accept or reject them). Then have GitHub Actions run `make test`. Note
+that you do *not* need to run your tests on the unfixed version of the
+code---the tests are intended to verify that the code is fixed and prevent
+the bugs from being reintroduced in later versions (known as *regression
+tests*).
 
 ## Part 3: Fuzzing and Coverage
 
@@ -124,7 +138,9 @@ found in the lecture slides).
 You should notice that there are portions of the program that are
 *uncovered* (i.e., the code was not executed while processing your test
 suite). Pick two lines of code from the program that are currently
-not covered and create test cases that cover them.
+not covered and create test cases (`cov1.gft` and `cov2.gft`) that cover
+them. You should add these test cases to your test suite by placing them
+in the `testcases/valid` or `testcases/invalid` directory, as appropriate.
 
 An easy and effective way of finding crashes and getting higher coverage
 in a program is to *fuzz* it with a fuzzer like AFL++. Fuzz the program
@@ -136,35 +152,46 @@ the fuzzer run for at least two hours, and then examine the test cases
 (in the `queue` directory) and crashes/hangs (in the `crashes` and
 `hangs` directories).
 
-Add the non-crashing test cases to your test
-suite, and produce a new coverage report. You should see that the tests
+Run the gift card reader on the test cases in the `queue` directory. You
+can do this with a for loop like this:
+
+```
+for f in output/queue/id*; do ./giftcardreader 1 "$f"; done
+```
+
+And then produce a new coverage report. You should see that the tests
 generated by the fuzzer reach more parts of the gift card program.
 
 Finally, pick two crashes/hangs and fix the bugs in the program that
 cause them. You should include these test cases in the tests you run
-in GitHub Actions.
+in GitHub Actions (as `fuzzer1.gft` and `fuzzer2.gft`).
 
-To complete the assignment, commit your updated code, your handwritten
-tests, the fuzzer-generated tests, and a brief writeup explaining the
-bugs you found and fixed in this part.
+To complete the assignment, commit your updated code, your handmade
+tests (`cov1.gft` and `cov2.gft`), the fuzzer-generated tests (`fuzzer1.gft`
+and `fuzzer2.gft`), and a brief writeup explaining the bugs you found
+and fixed in this part (`part3.txt`). You do not need to commit all the test
+cases generated by the fuzzer, or the coverage reports.
 
 ## Hints
 
 1. What counts as two different bugs? A general rule of thumb is that
    if you can fix one of them without fixing the other, then they will
    be counted as distinct bugs.
-3. Some crashes may not occur consistently every time you run the program,
+2. Some crashes may not occur consistently every time you run the program,
    or may not occur when you run the program in a different environment or
    with different compile flags. One way to make a crash more reproducible
    is to use Address Sanitizer (ASAN), which we will cover in class. The
    `Makefile` also includes a target that will build the gift card reader
    using ASAN, which you can invoke with `make asan`.
-2. When fixing a crash, you should try to understand what the root cause is.
+3. When fixing a crash, you should try to understand what the root cause is.
    You will probably find it helpful to look at the address sanitizer output,
    which will usually tell you exactly what line of the program is accessing
    invalid memory. You may also want to try using the `gdb` or `lldb` debuggers;
    guides and tutorials can be found online. Your IDE (if you use one) may also
-   provide a built-in debugger. 
+   provide a built-in debugger.
+4. The gift card reader does *not* need to attempt to parse or "fix" invalid gift
+   card files; you can simply reject these by printing an error and exiting with
+   a non-zero exit code (e.g., `exit(1)`).
 
 ## Grading
 
@@ -190,25 +217,27 @@ Part 3 is worth 40 points:
 
 ## What to Submit
 
-On Brightspace, **submit a link to your GitHub repository**. This is necessary so that we can tell which GitHub username corresponds to which NYU account.
-
-The repository should contain:
+Your repository should contain:
 
 * Part 1
   * Your `.github/workflows/hello.yml`
   * At least one signed commit
 * Part 2
-  * A directory named `part2` that contains `crash1.gft`, `crash2.gft`,
-    `hang.gft`, and `bugs.txt`
+  * In `testcases/invalid`: `crash1.gft`, `crash2.gft`, and `hang.gft`.
+  * A text file named `part2.txt` that contains the bug descriptions
+    for each of the three test cases
   * A GitHub Actions YML that runs your tests
   * A commit with the fixed version of the code (if you like, this
     commit can also contain the files mentioned above)
 * Part 3
-  * A directory named `part3` that contains `cov1.gft`, `cov2.gft`,
-    `fuzzer1.gft`, `fuzzer2.gft`, and `writeup.txt`
+  * In `testcases/invalid` or `testcases/valid`: `cov1.gft`, `cov2.gft`,
+    `fuzzer1.gft`, and `fuzzer2.gft`
+  * A text file named `part3.txt` that contains your writeup
   * An updated Actions YML that runs the new tests
   * A commit with the fixed version of the code (if you like, this
     commit can also contain the files mentioned above)
+
+**Each part must be committed by its deadline.**
 
 ## Concluding Remarks
 

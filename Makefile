@@ -1,13 +1,13 @@
 default: giftcardreader
 
 giftcardreader: giftcardreader.c giftcard.h
-	gcc -o giftcardreader giftcardreader.c
+	gcc -g -o giftcardreader giftcardreader.c
 
 asan: giftcardreader.c giftcard.h
 	gcc -fsanitize=address -g -o giftcardreader giftcardreader.c
 
 test: giftcardreader
-	./giftcardreader 1 examplefile.gft
+	./runtests.sh
 
 # .PHONY tells make to always assume this target needs
 # to be rebuilt
