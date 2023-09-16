@@ -21,19 +21,16 @@ you want to imitate.
 In order to complete this assignment, you are required to use the git
 VCS. Before beginning to write your code, you should first install git
 and clone the repository from GitHub classroom. The git binaries can
-be installed by your local package manager or at
-https://git-scm.com/downloads. For a cheat-sheet of git commands, please
-see https://github.com/nyutandononline/CLI-Cheat-Sheet/blob/master/git-commands.md.
+be installed by your local package manager or [here](https://git-scm.com/downloads). 
+For a cheat-sheet of git commands, please see [this](https://github.com/nyutandononline/CLI-Cheat-Sheet/blob/master/git-commands.md).
 Although we will not be checking your commit messages or git log, it is
 recommended that you write descriptive commit messages so that the
 evolution of your repository is easy to understand. For a guide to
-writing good commit messages, please read
-https://chris.beams.io/posts/git-commit/ and the [Linux kernel's advice
-on writing good commit messages](https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=b23dac905bde28da47543484320db16312c87551#n134).
+writing good commit messages, please read [this](https://chris.beams.io/posts/git-commit/)
+and the [Linux kernel's advice on writing good commit messages](https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=b23dac905bde28da47543484320db16312c87551#n134).
 
 After git is installed, you will want to configure your git user to sign
-your commits. This can be done by following the guide at
-https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work. You will also
+your commits. This can be done by following all the steps on [verify commit signatures](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification). You will also
 need to [add your GPG public key to your GitHub profile](https://github.com/settings/keys),
 and make sure that the email address set in your GitHub account matches
 the one you specified when generating your keys. You can find more information
