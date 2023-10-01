@@ -244,7 +244,7 @@ program by repeatedly finding and fixing bugs (at least when the program
 is this small), it's a lot of work, and just because a fuzzer stops
 finding bugs doesn't mean that the program is bug-free!
 
-Realistically, this program is probably salvageable in its current
+Realistically, this program is probably not salvageable in its current
 state. It would be better in this case to rewrite it from scratch,
 either in C using a very defensive programming style, or in a safer
 language like Python or Rust. In the "clean" directory, you can find
