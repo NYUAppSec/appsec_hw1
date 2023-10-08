@@ -119,7 +119,8 @@ should accept or reject them). Then have GitHub Actions run `make test`. Note
 that you do *not* need to run your tests on the unfixed version of the
 code---the tests are intended to verify that the code is fixed and prevent
 the bugs from being reintroduced in later versions (known as *regression
-tests*).
+tests*). You are welcome to use this C/C++ GitHub Actions CI template 
+[here](https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml).
 
 ## Part 3: Fuzzing and Coverage
 
