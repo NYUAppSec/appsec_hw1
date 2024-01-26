@@ -10,7 +10,7 @@
 # opcode (1 byte) arg1 (1 byte) arg2 (1 byte)
 # 0x00  no-op (if there is extra space at end of program this should be used)
 # 0x01  get current char into register "arg1" (16 registers)
-# 0x02  put registar "arg1" into current char
+# 0x02  put register "arg1" into current char
 # 0x03  move cursor by "arg1" bytes (can be negative)
 # 0x04  put constant "arg1" into register "arg2"
 # 0x05  xor register "arg1" with register "arg2" and store result in register "arg1"
@@ -30,24 +30,26 @@ ArgTypes = Enum('ArgTypes', 'REG CONST LABEL NONE')
 
 # Opcode definitions: (opcode, arg1_type, arg2_type, num_args)
 opcode_defs = {
-    "nop":         (0x00, ArgTypes.NONE, ArgTypes.NONE, 0),
-    "getch":       (0x01, ArgTypes.REG, ArgTypes.NONE, 1),
-    "putch":       (0x02, ArgTypes.REG, ArgTypes.NONE, 1),
-    "movcurs":     (0x03, ArgTypes.CONST, ArgTypes.NONE, 1),
-    "mov":         (0x04, ArgTypes.CONST, ArgTypes.REG, 2),
-    "xor":         (0x05, ArgTypes.REG, ArgTypes.REG, 2),
-    "add":         (0x06, ArgTypes.REG, ArgTypes.REG, 2),
-    "disp":        (0x07, ArgTypes.NONE, ArgTypes.NONE, 0),
-    "end":         (0x08, ArgTypes.NONE, ArgTypes.NONE, 0),
-    "jmp":         (0x09, ArgTypes.LABEL, ArgTypes.NONE, 1),
-    "jz":          (0x10, ArgTypes.LABEL, ArgTypes.NONE, 1),
+    "nop": (0x00, ArgTypes.NONE, ArgTypes.NONE, 0),
+    "getch": (0x01, ArgTypes.REG, ArgTypes.NONE, 1),
+    "putch": (0x02, ArgTypes.REG, ArgTypes.NONE, 1),
+    "movcurs": (0x03, ArgTypes.CONST, ArgTypes.NONE, 1),
+    "mov": (0x04, ArgTypes.CONST, ArgTypes.REG, 2),
+    "xor": (0x05, ArgTypes.REG, ArgTypes.REG, 2),
+    "add": (0x06, ArgTypes.REG, ArgTypes.REG, 2),
+    "disp": (0x07, ArgTypes.NONE, ArgTypes.NONE, 0),
+    "end": (0x08, ArgTypes.NONE, ArgTypes.NONE, 0),
+    "jmp": (0x09, ArgTypes.LABEL, ArgTypes.NONE, 1),
+    "jz": (0x10, ArgTypes.LABEL, ArgTypes.NONE, 1),
 }
 
-opcode_bytes = {v[0]: (k,v[1],v[2]) for k, v in opcode_defs.items()}
+opcode_bytes = {v[0]: (k, v[1], v[2]) for k, v in opcode_defs.items()}
+
 
 # Take a byte in the range 0-255 and make it signed
 def signed(b):
     return struct.unpack("b", bytes([b]))[0]
+
 
 # Take a (possibly negative) byte and make it unsigned
 def unsigned(b):
@@ -55,6 +57,7 @@ def unsigned(b):
         return struct.pack("b", b)
     else:
         return struct.pack("B", b)
+
 
 def format_arg(arg, arg_type, label=None):
     if arg_type == ArgTypes.REG:
@@ -67,6 +70,7 @@ def format_arg(arg, arg_type, label=None):
         return ""
     else:
         raise Exception(f"unknown arg type: {arg_type}")
+
 
 class Instruction:
     def __init__(self, opcode, arg1, arg2, label=None, filename="unknown", line_num=0):
@@ -94,13 +98,14 @@ class Instruction:
         if self.label and not self.label_resolved:
             raise Exception("Label not resolved")
         return bytes([self.opcode]) + unsigned(self.arg1) + unsigned(self.arg2)
-    
+
     @staticmethod
     def from_bytes(bytes_):
         opcode = bytes_[0]
         arg1 = bytes_[1]
         arg2 = bytes_[2]
         return Instruction(opcode, arg1, arg2)
+
 
 def parse(line, filename, line_num):
     """
@@ -109,7 +114,7 @@ def parse(line, filename, line_num):
     Example input:
         mov r0, 0x12
     """
-    line = line.split(';')[0] # Remove comments
+    line = line.split(';')[0]  # Remove comments
     line = line.strip()
     if not line:
         return None
@@ -122,7 +127,7 @@ def parse(line, filename, line_num):
     args = parts[1:]
     if len(args) != opspec[3]:
         raise Exception(f"wrong number of arguments for opcode {opcode} in {filename}:{line_num} "
-                         f"(expected {opspec[3]}, got {len(args)})")
+                        f"(expected {opspec[3]}, got {len(args)})")
     parsed_args = [0, 0]
     label = None
     for i, arg in enumerate(args):
@@ -143,15 +148,17 @@ def parse(line, filename, line_num):
             try:
                 parsed_args[i] = int(arg, 0)
                 if parsed_args[i] % 3 != 0:
-                    print (f"Warning: numeric label {arg} in {filename}:{line_num} is not a multiple of 3", file=sys.stderr)
+                    print(f"Warning: numeric label {arg} in {filename}:{line_num} is not a multiple of 3",
+                          file=sys.stderr)
             except ValueError:
-                parsed_args[i] = 0 # Will be resolved later
+                parsed_args[i] = 0  # Will be resolved later
                 label = arg
         elif argtypes[i] == ArgTypes.NONE:
             pass
         else:
             raise Exception(f"unknown arg type: {argtypes[i]}")
     return Instruction(opcode_defs[opcode][0], *parsed_args, label, filename, line_num)
+
 
 def assemble(filename):
     """
@@ -183,6 +190,7 @@ def assemble(filename):
             instruction.label_resolved = True
     return b"".join([instruction.assemble() for instruction in instructions])
 
+
 def disas(bytes_):
     # Remove trailing nulls
     bytes_ = bytes_.rstrip(b"\x00")
@@ -193,14 +201,14 @@ def disas(bytes_):
     for i in range(0, len(bytes_), 3):
         if i > len(bytes_) - 3:
             break
-        inst = Instruction.from_bytes(bytes_[i:i+3])
+        inst = Instruction.from_bytes(bytes_[i:i + 3])
         instructions.append(inst)
     labelmap = {}
     # Resolve labels
     for i, inst in enumerate(instructions):
         if inst.opcode == 0x09 or inst.opcode == 0x10:
             # jmp or jz
-            our_offset = (i+1) * 3
+            our_offset = (i + 1) * 3
             target = our_offset + signed(inst.arg1)
             target_index = target // 3
             inst.label = f"L{target_index}"
@@ -208,13 +216,15 @@ def disas(bytes_):
     for i, inst in enumerate(instructions):
         if i in labelmap:
             print(f"   L{i}:")
-        ins_bytes = bytes_[i*3:(i+1)*3]
-        print(f"{i*3:02x}:    {ins_bytes[0]:02x} {ins_bytes[1]:02x} {ins_bytes[2]:02x}    {inst}")
+        ins_bytes = bytes_[i * 3:(i + 1) * 3]
+        print(f"{i * 3:02x}:    {ins_bytes[0]:02x} {ins_bytes[1]:02x} {ins_bytes[2]:02x}    {inst}")
+
 
 test_program = """
 START:
 jmp START
 """
+
 
 def main():
     parser = argparse.ArgumentParser(description="Assemble a file of assembly code into bytes.")
@@ -233,6 +243,7 @@ def main():
             print(f"WARNING: assembled program is longer than 256 bytes ({len(assembled_bytes)})", file=sys.stderr)
         with open(args.output, "wb") as f:
             f.write(assembled_bytes)
+
 
 if __name__ == "__main__":
     main()

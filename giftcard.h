@@ -38,7 +38,7 @@
 //    124    abc...        123...         2          44      1   1500   fed... 24    2   "Happy Birthday!\0"
 //
 // [BETA] program spec for animated text feature
-// customer requested. Electronic greeting cards use THX-1138 miroprocessor and
+// customer requested. Electronic greeting cards use THX-1138 microprocessor and
 // can support small programs to animate the text being displayed. Real processor
 // has more opcodes than this but for beta demo just implement these
 // programs operate on the message buffer
@@ -49,7 +49,7 @@
 // opcode (1 byte) arg1 (1 byte) arg2 (1 byte)
 // 0x00  no-op (if there is extra space at end of program this should be used)
 // 0x01  get current char into register "arg1" (16 registers)
-// 0x02  put registar "arg1" into current char
+// 0x02  put register "arg1" into current char
 // 0x03  move cursor by "arg1" bytes (can be negative)
 // 0x04  put constant "arg1" into register "arg2"
 // 0x05  xor register "arg1" with register "arg2" and store result in register "arg1"
