@@ -1,5 +1,15 @@
 # Homework 1: Beware of Geeks Bearing Gift Cards
 
+## Get Latest Updates
+Use the following commands to pull the latest updates.
+
+```bash
+git remote add upstream https://github.com/NYUAppSec/appsec_hw1
+git fetch upstream
+git merge upstream/master --allow-unrelated-histories
+git push
+```
+
 ## Introduction
 
 You've been handed the unpleasant task of performing an audit of code
@@ -30,7 +40,7 @@ writing good commit messages, please read [this](https://chris.beams.io/posts/gi
 and the [Linux kernel's advice on writing good commit messages](https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=b23dac905bde28da47543484320db16312c87551#n134).
 
 After git is installed, you will want to configure your git user to sign
-your commits. This can be done by following all the steps on [verify commit signatures](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification). You will also
+your commits. This can be done by following all the steps to [verify commit signatures](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification). You will also
 need to [add your GPG public key to your GitHub profile](https://github.com/settings/keys),
 and make sure that the email address set in your GitHub account matches
 the one you specified when generating your keys. You can find more information
