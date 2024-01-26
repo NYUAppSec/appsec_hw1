@@ -214,6 +214,11 @@ Part 3 is worth 40 points:
 
 ## What to Submit
 
+To submit your code, please only submit a file called `git_link.txt` that contains the name of your repository to **Gradescope**. 
+For example, if your GitHub account username is exampleaccount, you would submit a text file named `git_link.txt` with only one line that reads the following:
+
+    assignment-1-exampleaccount
+
 Your repository should contain:
 
 * Part 1
