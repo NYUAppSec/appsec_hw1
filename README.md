@@ -76,7 +76,7 @@ Check that the Action is running correctly in the GitHub interface.
 If you’d like to submit this part, push the `hw1p1handin` tag with the following:
 
     git tag -a -m "Completed hw1 part1." hw1p1handin
-    git push origin main
+    git push origin master
     git push origin hw1p1handin
 
 ## Part 2: Auditing and Test Cases
