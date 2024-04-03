@@ -120,7 +120,7 @@ the program. You should write:
    infinitely. (Hint: you may want to examine the "animation" record type
    to find a bug that causes the program to loop infinitely.)
 3. A text file, `part2.txt` explaining the bug triggered by each of your
-   three test cases.
+   three test cases and how to fix each bug.
 
 To create your own test files, you may want to refer to the `gengift.py`
 and `genanim.py` programs, which are Python scripts that create gift
