@@ -1,3 +1,6 @@
-# On GitHub Actions with Windows, git will use CRLF by default when checking out
-# the repo. If this file has CRLF line endings
-configure.ac text eol=lf
+# Always checkout with LF
+*.sh            text eol=lf
+*.txt           text eol=lf
+
+# Always checkout with CRLF
+*.bat           text eol=crlf
