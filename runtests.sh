@@ -59,7 +59,7 @@ check_exit_status ()
 }
 
 # Check to make sure that the giftcard executable exists.
-if [ ! -x ./giftcardreader ]; then
+if [ ! -x ./giftcardreader.original ]; then
     echo "Error: giftcard executable not found."
     exit 1
 fi
@@ -90,7 +90,7 @@ if exists "$VALID"/* ; then
     printf "${BOLD}%-50s %-5s %s${RESET}\n" "Testcase" "Pass?" "Exit Status"
     for gft in "$VALID"/* ; do
         [ -f "$gft" ] || break
-        timeout $MAX_RUNTIME ./giftcardreader 1 "$gft" &> /dev/null
+        timeout $MAX_RUNTIME ./giftcardreader.original 1 "$gft" &> /dev/null
         rv=$?
         if [ $rv -eq 0 ]; then
             pmsg="PASS"
@@ -111,7 +111,7 @@ if exists "$INVALID"/* ; then
     printf "${BOLD}%-50s %-5s %s${RESET}\n" "Testcase" "Pass?" "Exit Status"
     for gft in "$INVALID"/* ; do
         [ -f "$gft" ] || break
-        timeout $MAX_RUNTIME ./giftcardreader 1 "$gft" &> /dev/null
+        timeout $MAX_RUNTIME ./giftcardreader.original 1 "$gft" &> /dev/null
         rv=$?
         # Return values
         if [ $rv -gt 0 ] && [ $rv -lt 128 ]; then
