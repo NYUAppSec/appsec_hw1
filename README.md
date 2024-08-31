@@ -90,7 +90,7 @@ There is also a `Makefile` included in the repository. You can use this
 to build the program by typing `make`. You will have three executables
 
 * giftcardreader.original - This is the giftcard reader without any modifications
-* giftcardreader.asan -  Thie executable has a compiler flag `-fsanitize=address` that tells the compiler to use the AddressSanitizer, a memory error detector.
+* giftcardreader.asan -  This executable has a compiler flag `-fsanitize=address` that tells the compiler to use the AddressSanitizer, a memory error detector.
 * giftcardreader.ubsan - This is a compiler flag compiler flag `-fsanitize=undefined` that tells the compiler to use the UndefinedBehaviorSanitizer, a fast undefined behavior detector. It helps detect undefined behavior issues like integer overflows, misaligned or null pointers, etc.
 
 You can also use the `Makefile` to run the
