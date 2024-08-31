@@ -6,7 +6,7 @@ Use the following commands to pull the latest updates.
 ```bash
 git remote add upstream https://github.com/NYUAppSec/appsec_hw1
 git fetch upstream
-git merge upstream/master --allow-unrelated-histories
+git merge upstream/main --allow-unrelated-histories
 git push
 ```
 
@@ -59,8 +59,7 @@ git clone <your_repository_url>
 Note that if you have set up an SSH key, you will want to make sure you
 copy the SSH URL (which looks like `git@github.com:NYUAppSec/...`).
 
-The next step is to set up GitHub Actions to automatically build and test
-your code when you push a commit. You can find a [tutorial on GitHub Actions here](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions).
+The next step is to set up GitHub Actions to automatically build and test your code when you push a commit. You can find a [tutorial on GitHub Actions here](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions). You are welcome to use this C/C++ GitHub Actions CI template [here](https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml).
 
 For now, you should set up GitHub Actions to just run
 
@@ -91,7 +90,7 @@ There is also a `Makefile` included in the repository. You can use this
 to build the program by typing `make`. You will have three executables
 
 * giftcardreader.original - This is the giftcard reader without any modifications
-* giftcardreader.asan -  Thie executable has a compiler flag `-fsanitize=address` that tells the compiler to use the AddressSanitizer, a memory error detector.
+* giftcardreader.asan -  This executable has a compiler flag `-fsanitize=address` that tells the compiler to use the AddressSanitizer, a memory error detector.
 * giftcardreader.ubsan - This is a compiler flag compiler flag `-fsanitize=undefined` that tells the compiler to use the UndefinedBehaviorSanitizer, a fast undefined behavior detector. It helps detect undefined behavior issues like integer overflows, misaligned or null pointers, etc.
 
 You can also use the `Makefile` to run the
@@ -104,16 +103,18 @@ $ make test
 $ ./runtests.sh
 Running tests on valid gift cards (expected return value: 0)...
 Testcase                                           Pass? Exit Status
+animated.gft                                       PASS  0
 examplefile.gft                                    PASS  0
+message.gft                                        PASS  0
 
 Running tests on invalid gift cards (expected return value: nonzero)...
 Testcase                                           Pass? Exit Status
 badtype.gft                                        PASS  1
 
 TESTING SUMMARY:
-Passed: 2
+Passed: 4
 Failed: 0
-Total:  2
+Total:  4
 ```
 
 For this part, your job will be to find some flaws in the program, and
@@ -149,8 +150,7 @@ should accept or reject them). Then have GitHub Actions run `make test`. Note
 that you do *not* need to run your tests on the unfixed version of the
 code---the tests are intended to verify that the code is fixed and prevent
 the bugs from being reintroduced in later versions (known as *regression
-tests*). You are welcome to use this C/C++ GitHub Actions CI template
-[here](https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml).
+tests*).
 
 ### Submission
 If you’d like to submit this part, push the `hw1p2handin` tag with the following:
