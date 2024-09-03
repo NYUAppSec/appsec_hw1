@@ -30,10 +30,10 @@ you want to imitate.
 
 In order to complete this assignment, you are required to use the git
 VCS. Before beginning to write your code, you should first install git
-and clone the repository from GitHub classroom. The git binaries can
+and clone the repository from GitHub Classroom. The git binaries can
 be installed by your local package manager or [here](https://git-scm.com/downloads).
 For a cheat-sheet of git commands, please see [this](https://github.com/nyutandononline/CLI-Cheat-Sheet/blob/master/git-commands.md).
-Although we will not be checking your commit messages or git log, it is
+We will be spot checking your commit messages and/or git log, it is
 recommended that you write descriptive commit messages so that the
 evolution of your repository is easy to understand. For a guide to
 writing good commit messages, please read [this](https://chris.beams.io/posts/git-commit/)
@@ -57,9 +57,9 @@ git clone <your_repository_url>
 ```
 
 Note that if you have set up an SSH key, you will want to make sure you
-copy the SSH URL (which looks like `git@github.com:NYUAppSec/...`).
+copy the SSH URL (which looks like `git@github.com:NYUAppSec/...`). Also, we love that you setup an SSH key, good thinking!
 
-The next step is to set up GitHub Actions to automatically build and test your code when you push a commit. You can find a [tutorial on GitHub Actions here](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions). You are welcome to use this C/C++ GitHub Actions CI template [here](https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml).
+The next step is to set up GitHub Actions to automatically build and test your code whenever you push a commit. You can find a [tutorial on GitHub Actions here](https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions). You are welcome to use this C/C++ GitHub Actions CI template [here](https://github.com/actions/starter-workflows/blob/main/ci/c-cpp.yml).
 
 For now, you should set up GitHub Actions to just run
 
@@ -122,7 +122,7 @@ then create test cases (i.e., binary gift cards) that expose flaws in
 the program. You should write:
 
 1. *Two* test cases, `crash1.gft` and `crash2.gft`, that cause the
-   program to crash; each crash should have a different root cause.
+   program to crash; each crash should have a different root cause. Make sure you understand the causes for your write-up. 
    If your input gift card can crash with ANY of the three executables you get credit for crashing the giftcardreader. 
    To get credit for remediation, you must at a MINIMUM ensure that the input gift card file 
    will NOT crash with BOTH `giftcardreader.asan` AND `giftcardreader.ubsan`. 
@@ -150,7 +150,7 @@ should accept or reject them). Then have GitHub Actions run `make test`. Note
 that you do *not* need to run your tests on the unfixed version of the
 code---the tests are intended to verify that the code is fixed and prevent
 the bugs from being reintroduced in later versions (known as *regression
-tests*).
+tests*). You are showing that your fixes work, which means running your newly built code. 
 
 ### Submission
 If you’d like to submit this part, push the `hw1p2handin` tag with the following:
@@ -166,8 +166,8 @@ test suite exercises your program's behaviors is *coverage*. To start
 off, measure the coverage that your program achieves with the test cases
 you created in Part 2. To do this, you should build `giftcardreader`
 with the `--coverage` option to `gcc`, run your test suite, and then
-produce a coverage report using `lcov` (details on how to do this can be
-found in the lecture slides).
+produce a coverage report using `lcov` (Hints on how to do this can be
+found on Brightspace).
 
 You should notice that there are portions of the program that are
 *uncovered* (i.e., the code was not executed while processing your test
@@ -270,8 +270,8 @@ Part 1 is worth 20 points:
 Part 2 is worth 40 points:
 
 * 15 points for your test cases and fixes
-* 15 points for the bug writeup
-* 10 points for GitHub Actions regression testing
+* 10 points for the bug writeup
+* 15 points for GitHub Actions regression testing
 
 Part 3 is worth 40 points:
 
@@ -286,6 +286,8 @@ To submit your code, please only submit a file called `git_link.txt` that contai
 For example, if your GitHub account username is exampleaccount, you would submit a text file named `git_link.txt` with only one line that reads the following:
 
     assignment-1-exampleaccount
+
+Remember that <b>Gradescope is not instant</b>. Especially if we have to look into past GitHub action runs. We have a timeout set for 10 minutes, almost all well running code will complete within 5 minutes. Wait for it to complete or timeout before trying to re-run. 
 
 Your repository should contain:
 
