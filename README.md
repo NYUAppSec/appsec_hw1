@@ -91,10 +91,10 @@ to build the program by typing `make`. You will have three executables
 
 * giftcardreader.original - This is the giftcard reader without any modifications
 * giftcardreader.asan -  This executable has a compiler flag `-fsanitize=address` that tells the compiler to use the AddressSanitizer, a memory error detector.
-* giftcardreader.ubsan - This is a compiler flag compiler flag `-fsanitize=undefined` that tells the compiler to use the UndefinedBehaviorSanitizer, a fast undefined behavior detector. It helps detect undefined behavior issues like integer overflows, misaligned or null pointers, etc.
+* giftcardreader.ubsan - This has a compiler flag `-fsanitize=undefined` that tells the compiler to use the UndefinedBehaviorSanitizer, a fast undefined behavior detector. It helps detect undefined behavior issues like integer overflows, misaligned or null pointers, etc.
 
 You can also use the `Makefile` to run the
-(very minimal and incomplete) test suite (which you will be adding more tests!) for the program by typing
+(very minimal and incomplete) test suite (to which you will be adding more tests!) for the program by typing
 `make test`, which uses `runtests.sh` to run the gift card reader on the
 gift cards found in `testcases/valid` and `testcases/invalid`:
 
