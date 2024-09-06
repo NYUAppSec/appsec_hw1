@@ -287,6 +287,8 @@ For example, if your GitHub account username is exampleaccount, you would submit
 
     assignment-1-exampleaccount
 
+For ease of grading, we ask that you also submit copies of your writeups as part2.txt and part3.txt directly in Gradescope. Please ensure that these writeups are exact copies of the files from your repository, as we have implemented a check to verify the match. For further details on the writeup requirements, please refer to the grading rubric available in Brightspace under the "Assignment Guideline" section.
+
 Your repository should contain:
 
 * Part 1
