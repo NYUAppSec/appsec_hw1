@@ -283,9 +283,9 @@ Part 3 is worth 40 points:
 ## What to Submit
 
 To submit your code, please only submit a file called `git_link.txt` that contains the name of your repository to **Gradescope**.
-For example, if your GitHub account username is exampleaccount, you would submit a text file named `git_link.txt` with only one line that reads the following:
+For example, if your repo is located at 'h<span>ttps:</span>//github.com/NYUAppSec/appsec-homework-1-exampleaccount', you would submit a text file named `git_link.txt` with only line that reads with <ins><b>only</b></ins> the following:
 
-    assignment-1-exampleaccount
+    appsec-homework-1-exampleaccount
 
 Remember that <b>Gradescope is not instant</b>. Especially if we have to look into past GitHub action runs. We have a timeout set for 10 minutes, almost all well running code will complete within 5 minutes. Wait for it to complete or timeout before trying to re-run. 
 
