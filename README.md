@@ -174,7 +174,7 @@ You should notice that there are portions of the program that are
 suite). Pick two lines of code from the program that are currently
 not covered and create test cases (`cov1.gft` and `cov2.gft`) that cover
 them. You should add these test cases to your test suite by placing them
-in the `testcases/valid` or `testcases/invalid` directory, as appropriate.
+in the `testcases/valid` directory.
 
 An easy and effective way of finding crashes and getting higher coverage
 in a program is to *fuzz* it with a fuzzer like AFL++. Fuzz the program
