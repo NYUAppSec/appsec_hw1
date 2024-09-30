@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# This script runs the gift card reader on the gft files found in
-# the testcases directory.  It is intended to be run from the
+# This script runs the gift card reader (original, UBSAN, and ASAN versions) on the gft files found in
+# the testcases directory. It is intended to be run from the
 # top-level directory of the giftcard project. It can also be
 # invoked by running the "make test" command.
 
@@ -58,11 +58,13 @@ check_exit_status ()
     return 0
 }
 
-# Check to make sure that the giftcard executable exists.
-if [ ! -x ./giftcardreader.original ]; then
-    echo "Error: giftcard executable not found."
-    exit 1
-fi
+# Check to make sure that the giftcard executables exist.
+for exe in giftcardreader.original giftcardreader.ubsan giftcardreader.asan; do
+    if [ ! -x ./$exe ]; then
+        echo "Error: $exe executable not found."
+        exit 1
+    fi
+done
 
 VALID=./testcases/valid
 INVALID=./testcases/invalid
@@ -79,28 +81,36 @@ if [ ! -d "$INVALID" ]; then
     exit 1
 fi
 
-# Run the giftcardreader on each of the testcases. Valid gift cards
+# Run the giftcardreader versions on each of the testcases. Valid gift cards
 # should return 0, invalid gift cards should return non-zero. Crashes
 # are detected by checking for a return value greater than or equal to
 # 128, and are never considered a pass.
+# Credit to Clark Cone (NYU Student) for improving the count function
 passed=0
 failed=0
 echo "Running tests on ${BOLD}valid${RESET} gift cards (expected return value: 0)..."
 if exists "$VALID"/* ; then
-    printf "${BOLD}%-50s %-5s %s${RESET}\n" "Testcase" "Pass?" "Exit Status"
+    printf "${BOLD}%-50s %-5s %-20s %s${RESET}\n" "Testcase" "Pass?" "Version" "Exit Status"
     for gft in "$VALID"/* ; do
         [ -f "$gft" ] || break
-        timeout $MAX_RUNTIME ./giftcardreader.original 1 "$gft" &> /dev/null
-        rv=$?
-        if [ $rv -eq 0 ]; then
-            pmsg="PASS"
-            passed=$((passed+1))
-        else
-            pmsg="FAIL"
-            failed=$((failed+1))
-        fi
-        [ "$pmsg" = "PASS" ] && rowcolor=$GREEN || rowcolor=$RED
-        printf "${rowcolor}%-50s %-5s %s${RESET}\n" "$(basename "$gft")" "$pmsg" "$(check_exit_status $rv)"
+        test_passed=false
+        for exe in giftcardreader.original giftcardreader.ubsan giftcardreader.asan; do
+            timeout $MAX_RUNTIME ./$exe 1 "$gft" &> /dev/null
+            rv=$?
+            if [ $rv -eq 0 ]; then
+                pmsg="PASS"
+                test_passed=true
+                rowcolor=$GREEN
+                printf "${rowcolor}%-50s %-5s %-20s %s${RESET}\n" "$(basename "$gft")" "$pmsg" "$exe" "$(check_exit_status $rv)"
+                passed=$((passed+1))
+                break
+            else
+                pmsg="FAIL"
+                rowcolor=$RED
+                printf "${rowcolor}%-50s %-5s %-20s %s${RESET}\n" "$(basename "$gft")" "$pmsg" "$exe" "$(check_exit_status $rv)"
+                failed=$((failed+1))
+            fi
+        done
     done
 else
     echo "${YELLOW}Skipped: no testcases found in ${VALID}${RESET}"
@@ -108,21 +118,27 @@ fi
 echo
 echo "Running tests on ${BOLD}invalid${RESET} gift cards (expected return value: nonzero)..."
 if exists "$INVALID"/* ; then
-    printf "${BOLD}%-50s %-5s %s${RESET}\n" "Testcase" "Pass?" "Exit Status"
+    printf "${BOLD}%-50s %-5s %-20s %s${RESET}\n" "Testcase" "Pass?" "Version" "Exit Status"
     for gft in "$INVALID"/* ; do
         [ -f "$gft" ] || break
-        timeout $MAX_RUNTIME ./giftcardreader.original 1 "$gft" &> /dev/null
-        rv=$?
-        # Return values
-        if [ $rv -gt 0 ] && [ $rv -lt 128 ]; then
-            pmsg="PASS"
-            passed=$((passed+1))
-        else
-            pmsg="FAIL"
-            failed=$((failed+1))
-        fi
-        [ "$pmsg" = "PASS" ] && rowcolor=$GREEN || rowcolor=$RED
-        printf "${rowcolor}%-50s %-5s %s${RESET}\n" "$(basename "$gft")" "$pmsg" "$(check_exit_status $rv)"
+        test_passed=false
+        for exe in giftcardreader.original giftcardreader.ubsan giftcardreader.asan; do
+            timeout $MAX_RUNTIME ./$exe 1 "$gft" &> /dev/null
+            rv=$?
+            if [ $rv -gt 0 ] && [ $rv -lt 128 ]; then
+                pmsg="PASS"
+                test_passed=true
+                rowcolor=$GREEN
+                printf "${rowcolor}%-50s %-5s %-20s %s${RESET}\n" "$(basename "$gft")" "$pmsg" "$exe" "$(check_exit_status $rv)"
+                passed=$((passed+1))
+                break
+            else
+                pmsg="FAIL"
+                rowcolor=$RED
+                printf "${rowcolor}%-50s %-5s %-20s %s${RESET}\n" "$(basename "$gft")" "$pmsg" "$exe" "$(check_exit_status $rv)"
+                failed=$((failed+1))
+            fi
+        done
     done
 else
     echo "${YELLOW}Skipped: no testcases found in ${INVALID}${RESET}"
