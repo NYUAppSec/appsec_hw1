@@ -9,11 +9,11 @@ asan: giftcardreader.c giftcard.h
 ubsan: giftcardreader.c giftcard.h
 	gcc -fsanitize=undefined -g -o giftcardreader.ubsan giftcardreader.c
 
-test: giftcardreader
+test: giftcardreader asan ubsan
 	./runtests.sh
 
 # .PHONY tells make to always assume this target needs
 # to be rebuilt
 .PHONY: clean
 clean:
-	rm -f *.o giftcardreader
+	rm -f *.o giftcardreader.original giftcardreader.asan giftcardreader.ubsan
